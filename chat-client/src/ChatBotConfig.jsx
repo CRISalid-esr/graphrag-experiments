@@ -1,11 +1,4 @@
-import {createChatBotMessage} from "react-chatbot-kit";
+import {createChatBotMessage} from 'react-chatbot-kit';
 
-const botName = "ChatBot";
-
-const chatBotConfig = {
-    initialMessages: [createChatBotMessage(`Hi! I'm ${botName}`)],
-    botName: botName,
-    customStyles: {botMessageBox: {backgroundColor: '#376B7E',}, chatButton: {backgroundColor: '#5ccc9d',},},
-};
-
-export default chatBotConfig
+const chatBotConfig = {initialMessages: [createChatBotMessage(`Bonjour, je peux vous aider à accéder aux informations sur la recherche à l'université.`)],};
+export default chatBotConfig;

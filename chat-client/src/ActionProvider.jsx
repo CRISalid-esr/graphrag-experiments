@@ -1,18 +1,54 @@
-class ActionProvider {
-   constructor(
-    createChatBotMessage,
-    setStateFunc,
-    createClientMessage,
-    stateRef,
-    createCustomMessage,
-    ...rest
-  ) {
-    this.createChatBotMessage = createChatBotMessage;
-    this.setState = setStateFunc;
-    this.createClientMessage = createClientMessage;
-    this.stateRef = stateRef;
-    this.createCustomMessage = createCustomMessage;
-  }
-}
+import React from 'react';
+
+const ActionProvider = ({createChatBotMessage, setState, children}) => {
+
+    const sendToGraphRag = async (messages, newMessage) => {
+        try {
+            const response = await fetch("/api", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    history: messages,
+                    message: newMessage,
+                })
+            });
+
+            if (!response.ok) {
+                throw new Error("Network response was not ok");
+            }
+
+            const data = await response.json();
+            if (data.error) {
+                throw new Error(data.error);
+            }
+
+            const botMessage = createChatBotMessage(data.reply);
+
+            setState((prev) => ({
+                ...prev,
+                messages: [...prev.messages, botMessage],
+            }));
+        } catch (error) {
+            console.error("Error:", error);
+            const errorMessage = createChatBotMessage("Sorry, I couldn't reach the server.");
+            setState((prev) => ({
+                ...prev,
+                messages: [...prev.messages, errorMessage],
+            }));
+        }
+    };
+
+    return (
+        <div>
+            {React.Children.map(children, (child) => {
+                return React.cloneElement(child, {
+                    actions: {sendToGraphRag},
+                });
+            })}
+        </div>
+    );
+};
 
 export default ActionProvider;
