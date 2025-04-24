@@ -9,4 +9,5 @@ class BasicNeo4jGraphRagService(GraphRagService):
 
     def run(self, request: ChatRequest) -> ChatResponse:
         last_message = request.message
-        return ChatResponse(reply=f"Neo4j says: you said '{last_message}'")
+        return ChatResponse(reply=f"Vous avez demandé '{last_message}'. Vous aurez la réponse "
+                                  f"quand le code du GraphRag sera écrit.")

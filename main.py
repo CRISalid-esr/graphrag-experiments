@@ -1,12 +1,12 @@
 from fastapi import FastAPI, Depends
 from fastapi.staticfiles import StaticFiles
+from starlette.responses import FileResponse
 
 from schemas import ChatRequest, ChatResponse
 from services import GraphRagService, BasicNeo4jGraphRagService
 
 app = FastAPI()
 
-app.mount("/chat", StaticFiles(directory="chat-client/build"), name="chat-client")
 app.mount("/static", StaticFiles(directory="chat-client/build/static"), name="static")
 
 
@@ -16,6 +16,15 @@ def get_graph_service() -> GraphRagService:
     :return: an instance of GraphRagService
     """
     return BasicNeo4jGraphRagService()
+
+
+@app.get("/chat", include_in_schema=False)
+def serve_chat():
+    """
+    Serve the chat client application.
+    :return: the root HTML file of the chat client
+    """
+    return FileResponse("chat-client/build/index.html")
 
 
 @app.post("/api", response_model=ChatResponse)
