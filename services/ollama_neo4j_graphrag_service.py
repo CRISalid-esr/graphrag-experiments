@@ -1,3 +1,5 @@
+import logging
+
 from neo4j import GraphDatabase
 
 from neo4j_graphrag.llm import OllamaLLM
@@ -7,7 +9,6 @@ from neo4j_graphrag.exceptions import Text2CypherRetrievalError
 from neo4j_graphrag.exceptions import RagInitializationError, LLMGenerationError
 
 from dotenv import dotenv_values
-
 
 from schemas import ChatRequest, ChatResponse
 from services.graphrag_service import GraphRagService
@@ -55,9 +56,6 @@ class OllamaNeo4jGraphRagService(GraphRagService):
                 rag = GraphRAG(retriever=retriever, llm=llm)
                 response = rag.search(query_text=question).answer
                 return response
-            except RagInitializationError:
-                return 'An error occured. I can not provide the information you asked for.'
-            except LLMGenerationError:
-                return 'An error occured. I can not provide the information you asked for.'
-            except Text2CypherRetrievalError:
-                return 'An error occured. I can not provide the information you asked for.'
+            except (RagInitializationError, LLMGenerationError, Text2CypherRetrievalError) as e:
+                logging.error("RAG failure: %s", e)
+                return "Une erreur est survenue. Je ne peux pas fournir l'information demandée."
