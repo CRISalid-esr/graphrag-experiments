@@ -43,8 +43,8 @@ class OllamaNeo4jGraphRagService(GraphRagService):
         auth_params = (self.config['NEO4J_USERNAME'],self.config['NEO4J_PASSWORD'])
         with GraphDatabase.driver(self.config['NEO4J_URI'],auth=auth_params) as driver:
 
-            model_params = {"temperature": float(self.config['MODEL_TEMP'])}
-            llm = OllamaLLM(model_name=self.config['MODEL_NAME'], model_params=model_params)
+            model_params = {"temperature": float(self.config['OLLAMA_MODEL_TEMP'])}
+            llm = OllamaLLM(model_name=self.config['OLLAMA_MODEL_NAME'], model_params=model_params)
 
             retriever = Text2CypherRetriever(
                 driver=driver,
