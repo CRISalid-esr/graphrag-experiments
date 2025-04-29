@@ -7,9 +7,10 @@ name = "pypi"
 fastapi = {extras = ["standard"], version = "*"}
 pylint = "*"
 python-dotenv = "*"
-neo4j-graphrag = "*"
 openai = "*"
 ollama = "*"
+neo4j-graphrag = {extras = ["vertexai"], version = "*"}
+vertexai = "*"
 
 [dev-packages]
 
