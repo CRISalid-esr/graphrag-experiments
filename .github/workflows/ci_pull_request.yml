@@ -27,4 +27,4 @@ jobs:
       
       - name: Lint with Pylint
         run: |
-          pylint --rcfile=.pylintrc .
+          pipenv run pylint --rcfile=.pylintrc .
