@@ -10,8 +10,8 @@ python-dotenv = "*"
 openai = "*"
 ollama = "*"
 vertexai = "*"
-neo4j-graphrag = {extras = ["google"], version = "*"}
 google-cloud-aiplatform = "*"
+neo4j-graphrag = {extras = ["openai"], version = "*"}
 
 [dev-packages]
 

@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "7f8a592ae4e3acbc3775c8bee5a0f4594f5b01478a95adbd80f408b8edfa1327"
+            "sha256": "80dd79d81b6294bfbe2f0b55a77bd025330c3e33ac13f89744b1e8339680bc68"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -723,7 +723,7 @@
         },
         "neo4j-graphrag": {
             "extras": [
-                "google"
+                "openai"
             ],
             "hashes": [
                 "sha256:29a854f2f1e268f043446cdd387c72ee954b87726329ef6479c59ed7b9cf0751",
@@ -804,12 +804,12 @@
         },
         "openai": {
             "hashes": [
-                "sha256:a712b50e78cf78e6d7b2a8f69c4978243517c2c36999756673e07a14ce37dc0a",
-                "sha256:fd2bfaf4608f48102d6b74f9e11c5ecaa058b60dad9c36e409c12477dfd91fb2"
+                "sha256:9c1d9ad59e6e3bea7205eedc9ca66eeebae18d47b527e505a2b0d2fb1538e26e",
+                "sha256:f430c8b848775907405c6eff54621254c96f6444c593c097e0cc3a9f8fdda96f"
             ],
             "index": "pypi",
             "markers": "python_version >= '3.8'",
-            "version": "==1.76.0"
+            "version": "==1.76.2"
         },
         "packaging": {
             "hashes": [
