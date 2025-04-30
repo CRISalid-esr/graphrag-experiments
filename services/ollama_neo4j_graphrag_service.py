@@ -2,10 +2,10 @@ from neo4j import GraphDatabase
 from neo4j_graphrag.llm import OllamaLLM
 
 from schemas import ChatRequest, ChatResponse
-from services.graphrag_service import GraphRagService
+from services.neo4j_graphrag_service import Neo4jGraphRagService
 
 
-class OllamaNeo4jGraphRagService(GraphRagService):
+class OllamaNeo4jGraphRagService(Neo4jGraphRagService):
     """
     Neo4j GraphRAG service implementation, using a local Ollama model and a Text2Cypher approach.
     """
@@ -23,6 +23,7 @@ class OllamaNeo4jGraphRagService(GraphRagService):
         return ChatResponse(reply=reply)
 
     def _text2cypher_query_graphrag(self, question: str) -> str:
+        # pylint: disable=duplicate-code
         """
         Queries the Neo4j database using a Text2Cypher process.
         :param question: The question to answer

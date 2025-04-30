@@ -1,8 +1,8 @@
 from schemas import ChatRequest, ChatResponse
-from services.graphrag_service import GraphRagService
+from services.neo4j_graphrag_service import Neo4jGraphRagService
 
 
-class BasicNeo4jGraphRagService(GraphRagService):
+class BasicNeo4jGraphRagService(Neo4jGraphRagService):
     """
     Basic Neo4j GraphRAG service implementation.
     """

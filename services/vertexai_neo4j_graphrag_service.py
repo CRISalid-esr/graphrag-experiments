@@ -1,13 +1,12 @@
-from dotenv import load_dotenv
 from neo4j import GraphDatabase
 from neo4j_graphrag.llm import VertexAILLM
 from vertexai.generative_models import GenerationConfig
 
 from schemas import ChatRequest, ChatResponse
-from services.graphrag_service import GraphRagService
+from services.neo4j_graphrag_service import Neo4jGraphRagService
 
 
-class VertexAINeo4jGraphRagService(GraphRagService):
+class VertexAINeo4jGraphRagService(Neo4jGraphRagService):
     """
     Neo4j GraphRAG service implementation, using a VertexAI model and a Text2Cypher approach.
     """
@@ -25,15 +24,14 @@ class VertexAINeo4jGraphRagService(GraphRagService):
         return ChatResponse(reply=reply)
 
     def _text2cypher_query_graphrag(self, question: str) -> str:
+        # pylint: disable=duplicate-code
         """
         Queries the Neo4j database using a Text2Cypher process.
         :param question: The question to answer
         :return: The answer to the question
         """
-
         auth_params = (self.config['NEO4J_USERNAME'], self.config['NEO4J_PASSWORD'])
         with GraphDatabase.driver(self.config['NEO4J_URI'], auth=auth_params) as driver:
-            load_dotenv(override=True)
             model_name = self.config['VERTEXAI_MODEL_NAME']
             generation_config = GenerationConfig(temperature= \
                                                      float(self.config['VERTEXAI_MODEL_TEMP']))
