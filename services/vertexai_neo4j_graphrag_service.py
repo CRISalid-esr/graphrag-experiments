@@ -1,5 +1,4 @@
 import logging
-
 from neo4j import GraphDatabase
 
 from neo4j_graphrag.llm import VertexAILLM
@@ -10,7 +9,7 @@ from neo4j_graphrag.exceptions import RagInitializationError, LLMGenerationError
 
 from vertexai.generative_models import GenerationConfig
 
-from dotenv import dotenv_values
+from dotenv import dotenv_values, load_dotenv
 
 from schemas import ChatRequest, ChatResponse
 from services.graphrag_service import GraphRagService
@@ -45,13 +44,13 @@ class VertexAINeo4jGraphRagService(GraphRagService):
         auth_params = (self.config['NEO4J_USERNAME'],self.config['NEO4J_PASSWORD'])
         with GraphDatabase.driver(self.config['NEO4J_URI'],auth=auth_params) as driver:
 
+            load_dotenv(override=True)
             model_name = self.config['VERTEXAI_MODEL_NAME']
             generation_config = GenerationConfig(temperature=\
                                                      float(self.config['VERTEXAI_MODEL_TEMP']))
-            api_key = self.config['VERTEXAI_API_KEY']
 
             llm = VertexAILLM(model_name=model_name,
-                              generation_config=generation_config, api_key=api_key)
+                              generation_config=generation_config)
 
             retriever = Text2CypherRetriever(
                 driver=driver,

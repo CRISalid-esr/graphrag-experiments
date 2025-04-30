@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "00a4f17af96568994161ccb9935226623b335f609e05a6c5c2051c6da047b031"
+            "sha256": "07f48be594275fec5874c2e1536f8220f0c7be424ae488ce639bec834f96eb3f"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -722,7 +722,7 @@
         },
         "neo4j-graphrag": {
             "extras": [
-                "vertexai"
+                "google"
             ],
             "hashes": [
                 "sha256:29a854f2f1e268f043446cdd387c72ee954b87726329ef6479c59ed7b9cf0751",

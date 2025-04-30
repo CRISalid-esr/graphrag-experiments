@@ -9,8 +9,8 @@ pylint = "*"
 python-dotenv = "*"
 openai = "*"
 ollama = "*"
-neo4j-graphrag = {extras = ["vertexai"], version = "*"}
 vertexai = "*"
+neo4j-graphrag = {extras = ["google"], version = "*"}
 
 [dev-packages]
 
