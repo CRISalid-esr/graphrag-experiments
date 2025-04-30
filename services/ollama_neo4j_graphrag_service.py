@@ -1,14 +1,5 @@
-import logging
-
 from neo4j import GraphDatabase
-
 from neo4j_graphrag.llm import OllamaLLM
-from neo4j_graphrag.retrievers import Text2CypherRetriever
-from neo4j_graphrag.generation import GraphRAG
-from neo4j_graphrag.exceptions import Text2CypherRetrievalError
-from neo4j_graphrag.exceptions import RagInitializationError, LLMGenerationError
-
-from dotenv import dotenv_values
 
 from schemas import ChatRequest, ChatResponse
 from services.graphrag_service import GraphRagService
@@ -18,8 +9,6 @@ class OllamaNeo4jGraphRagService(GraphRagService):
     """
     Neo4j GraphRAG service implementation, using a local Ollama model and a Text2Cypher approach.
     """
-    def __init__(self):
-        self.config = dotenv_values(".env")
 
     def run(self, request: ChatRequest) -> ChatResponse:
         """
@@ -40,22 +29,8 @@ class OllamaNeo4jGraphRagService(GraphRagService):
         :return: The answer to the question
         """
 
-        auth_params = (self.config['NEO4J_USERNAME'],self.config['NEO4J_PASSWORD'])
-        with GraphDatabase.driver(self.config['NEO4J_URI'],auth=auth_params) as driver:
-
+        auth_params = (self.config['NEO4J_USERNAME'], self.config['NEO4J_PASSWORD'])
+        with GraphDatabase.driver(self.config['NEO4J_URI'], auth=auth_params) as driver:
             model_params = {"temperature": float(self.config['OLLAMA_MODEL_TEMP'])}
             llm = OllamaLLM(model_name=self.config['OLLAMA_MODEL_NAME'], model_params=model_params)
-
-            retriever = Text2CypherRetriever(
-                driver=driver,
-                llm=llm,
-                neo4j_schema=self.config['NEO4J_SCHEMA'],
-                #examples=examples,
-            )
-            try:
-                rag = GraphRAG(retriever=retriever, llm=llm)
-                response = rag.search(query_text=question).answer
-                return response
-            except (RagInitializationError, LLMGenerationError, Text2CypherRetrievalError) as e:
-                logging.error("RAG failure: %s", e)
-                return "Une erreur est survenue. Je ne peux pas fournir l'information demandée."
+            return self._query_rag(driver, llm, question)
