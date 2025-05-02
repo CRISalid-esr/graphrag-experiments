@@ -12,6 +12,7 @@ ollama = "*"
 vertexai = "*"
 google-cloud-aiplatform = "*"
 neo4j-graphrag = {extras = ["openai"], version = "*"}
+sentence-transformers = "*"
 
 [dev-packages]
 
