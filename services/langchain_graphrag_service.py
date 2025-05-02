@@ -1,3 +1,5 @@
+# pylint: disable=cyclic-import
+
 import logging
 from abc import abstractmethod
 
@@ -52,6 +54,7 @@ class LangchainGraphRagService(GraphRagService):
             verbose=True,
             cypher_prompt=cypher_generation_prompt,
             allow_dangerous_requests=True,
+            top_k=int(self.config["LANGCHAIN_CYPHER_TOPK"]),
         )
 
         try:

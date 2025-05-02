@@ -3,7 +3,7 @@ from fastapi.staticfiles import StaticFiles
 from starlette.responses import FileResponse
 
 from schemas import ChatRequest, ChatResponse
-from services import GraphRagService, OllamaLangChainGraphRagService
+from services import GraphRagService, OpenaiLangChainGraphRagService
 
 app = FastAPI()
 
@@ -15,7 +15,7 @@ def get_graph_service() -> GraphRagService:
     Defines the concrete GraphRAG service to be used.
     :return: an instance of GraphRagService
     """
-    return OllamaLangChainGraphRagService()
+    return OpenaiLangChainGraphRagService()
 
 
 @app.get("/chat", include_in_schema=False)
