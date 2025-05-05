@@ -33,8 +33,7 @@ class Neo4jGraphRagService(GraphRagService):
         last_message = request.message
 
         rag_reply, cypher_query = self._text2cypher_query_graphrag(last_message)
-        reply = self._create_reply(cypher_query, rag_reply)
-        return ChatResponse(reply=reply)
+        return ChatResponse(reply=rag_reply, query=cypher_query)
 
     def _get_retriever(self, driver, llm):
         return Text2CypherRetriever(

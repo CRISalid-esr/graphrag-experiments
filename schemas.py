@@ -29,3 +29,4 @@ class ChatResponse(BaseModel):
     Represents a response from the chat API.
     """
     reply: str
+    query: str
