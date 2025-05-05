@@ -1,7 +1,6 @@
 from neo4j import GraphDatabase
 from neo4j_graphrag.llm import OpenAILLM
 
-from schemas import ChatRequest, ChatResponse
 from services.neo4j_graphrag_service import Neo4jGraphRagService
 
 
@@ -9,18 +8,6 @@ class OpenAINeo4jGraphRagService(Neo4jGraphRagService):
     """
     Neo4j GraphRAG service implementation, using an OpenAI model and a Text2Cypher approach.
     """
-
-    def run(self, request: ChatRequest) -> ChatResponse:
-        """
-        Process the chat request and return a response.
-        :param request: ChatRequest object from the client side with the question to answer
-        :return: ChatResponse object with the answer to the question
-        """
-        last_message = request.message
-
-        reply = self._text2cypher_query_graphrag(last_message)
-
-        return ChatResponse(reply=reply)
 
     def _text2cypher_query_graphrag(self, question: str) -> str:
         # pylint: disable=duplicate-code

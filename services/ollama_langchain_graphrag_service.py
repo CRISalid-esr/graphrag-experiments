@@ -21,6 +21,6 @@ class OllamaLangChainGraphRagService(LangchainGraphRagService):
             num_predict=500,
         )
 
-        reply = self._query_rag(llm,last_message)
-
+        rag_reply, cypher_query = self._query_rag(llm,last_message)
+        reply = self._create_reply(cypher_query, rag_reply)
         return ChatResponse(reply=reply)
