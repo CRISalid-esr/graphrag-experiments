@@ -1,13 +1,14 @@
 from neo4j import GraphDatabase
-from neo4j_graphrag.llm import OllamaLLM
+from neo4j_graphrag.llm import VertexAILLM
+from vertexai.generative_models import GenerationConfig
 
 from schemas import ChatRequest, ChatResponse
 from services.neo4j_graphrag_service import Neo4jGraphRagService
 
 
-class OllamaNeo4jGraphRagService(Neo4jGraphRagService):
+class VertexAINeo4jGraphRagService(Neo4jGraphRagService):
     """
-    Neo4j GraphRAG service implementation, using a local Ollama model and a Text2Cypher approach.
+    Neo4j GraphRAG service implementation, using a VertexAI model and a Text2Cypher approach.
     """
 
     def run(self, request: ChatRequest) -> ChatResponse:
@@ -29,9 +30,13 @@ class OllamaNeo4jGraphRagService(Neo4jGraphRagService):
         :param question: The question to answer
         :return: The answer to the question
         """
-
         auth_params = (self.config['NEO4J_USERNAME'], self.config['NEO4J_PASSWORD'])
         with GraphDatabase.driver(self.config['NEO4J_URI'], auth=auth_params) as driver:
-            model_params = {"temperature": float(self.config['OLLAMA_MODEL_TEMP'])}
-            llm = OllamaLLM(model_name=self.config['OLLAMA_MODEL_NAME'], model_params=model_params)
+            model_name = self.config['VERTEXAI_MODEL_NAME']
+            generation_config = GenerationConfig(temperature= \
+                                                     float(self.config['VERTEXAI_MODEL_TEMP']))
+
+            llm = VertexAILLM(model_name=model_name,
+                              generation_config=generation_config)
+
             return self._query_rag(driver, llm, question)
