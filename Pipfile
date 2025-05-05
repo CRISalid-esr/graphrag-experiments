@@ -13,6 +13,9 @@ vertexai = "*"
 google-cloud-aiplatform = "*"
 neo4j-graphrag = {extras = ["openai"], version = "*"}
 sentence-transformers = "*"
+langchain-neo4j = "*"
+langchain-openai = "*"
+langchain-ollama = "*"
 
 [dev-packages]
 
