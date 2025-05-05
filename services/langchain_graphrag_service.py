@@ -53,13 +53,14 @@ class LangchainGraphRagService(GraphRagService):
             graph=graph,
             verbose=True,
             cypher_prompt=cypher_generation_prompt,
+            return_intermediate_steps=True,
             allow_dangerous_requests=True,
             top_k=int(self.config["LANGCHAIN_CYPHER_TOPK"]),
         )
 
         try:
             result = chain.invoke(question)
-            return result["result"]
+            return result["result"], result['intermediate_steps'][0]['query']
         except (ValidationError, ValueError) as e:
             logging.error("RAG failure: %s", e)
-            return "Une erreur est survenue. Je ne peux pas fournir l'information demandée."
+            return "Une erreur est survenue. Je ne peux pas fournir l'information demandée.", None

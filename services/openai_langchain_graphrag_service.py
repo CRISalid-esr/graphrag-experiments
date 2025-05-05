@@ -21,6 +21,5 @@ class OpenaiLangChainGraphRagService(LangchainGraphRagService):
             max_tokens=1000,
         )
 
-        reply = self._query_rag(llm,last_message)
-
-        return ChatResponse(reply=reply)
+        rag_reply, cypher_query = self._query_rag(llm,last_message)
+        return ChatResponse(reply=rag_reply, query=cypher_query)
