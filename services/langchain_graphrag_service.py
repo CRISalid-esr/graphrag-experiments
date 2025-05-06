@@ -36,6 +36,9 @@ class LangchainGraphRagService(GraphRagService):
         Schema:
         {schema}
         
+        Some examples of generated queries are:
+        {examples}
+        
         Note: Do not include any explanations or apologies in your responses.
         Do not respond to any questions that might ask anything else than for you to construct a Cypher statement.
         Do not include any text except the generated Cypher statement.
@@ -44,10 +47,11 @@ class LangchainGraphRagService(GraphRagService):
         {question}"""
 
         cypher_generation_prompt = PromptTemplate(
-            input_variables=[self.config["NEO4J_SCHEMA"], question],
+            input_variables=[self.config["NEO4J_SCHEMA"],
+                             self.config["NEO4J_EXAMPLES_LIST"], question],
             template=cypher_generation_template
         )
-
+        print(cypher_generation_prompt)
         chain = GraphCypherQAChain.from_llm(
             llm,
             graph=graph,
