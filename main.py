@@ -3,7 +3,8 @@ from fastapi.staticfiles import StaticFiles
 from starlette.responses import FileResponse
 
 from schemas import ChatRequest, ChatResponse
-from services import GraphRagService, OpenaiLangChainGraphRagService
+from services.graphrag_service import GraphRagService
+from services.openai_langchain_graphrag_service import OpenaiLangChainGraphRagService
 
 app = FastAPI()
 

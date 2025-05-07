@@ -8,7 +8,7 @@ from langchain_core.prompts.prompt import PromptTemplate
 from pydantic import ValidationError
 
 from schemas import ChatRequest, ChatResponse
-from services import GraphRagService
+from services.graphrag_service import GraphRagService
 
 
 class LangchainGraphRagService(GraphRagService):
