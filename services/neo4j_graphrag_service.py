@@ -7,7 +7,7 @@ from neo4j_graphrag.generation import GraphRAG
 from neo4j_graphrag.retrievers import Text2CypherRetriever
 
 from schemas import ChatRequest, ChatResponse
-from services import GraphRagService
+from services.graphrag_service import GraphRagService
 
 
 class Neo4jGraphRagService(GraphRagService):
@@ -16,13 +16,12 @@ class Neo4jGraphRagService(GraphRagService):
     """
 
     @abstractmethod
-    def _text2cypher_query_graphrag(self,question):
+    def _text2cypher_query_graphrag(self, question):
         """
         Queries the Neo4j database using a Text2Cypher process.
         :param question: The question to answer
         :return: The answer to the question
         """
-
 
     def run(self, request: ChatRequest) -> ChatResponse:
         """
