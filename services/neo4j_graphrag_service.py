@@ -40,6 +40,7 @@ class Neo4jGraphRagService(GraphRagService):
             driver=driver,
             llm=llm,
             neo4j_schema=self.config['NEO4J_SCHEMA'],
+            examples=self.config['NEO4J_EXAMPLES_LIST']
         )
 
     def _query_rag(self, driver, llm, question):

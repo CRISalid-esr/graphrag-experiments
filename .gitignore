@@ -2,3 +2,4 @@
 __pycache__
 .env
 vertexAI_api_info.json
+fewshot_examples.json

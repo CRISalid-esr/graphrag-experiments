@@ -36,15 +36,18 @@ class LangchainGraphRagService(GraphRagService):
         Schema:
         {schema}
         
+        Some examples of generated queries are:
+        {examples}
+        
         Note: Do not include any explanations or apologies in your responses.
         Do not respond to any questions that might ask anything else than for you to construct a Cypher statement.
         Do not include any text except the generated Cypher statement.
 
         The question is:
-        {question}"""
+        {query}"""
 
         cypher_generation_prompt = PromptTemplate(
-            input_variables=[self.config["NEO4J_SCHEMA"], question],
+            input_variables=["schema", 'examples', 'query'],
             template=cypher_generation_template
         )
 
@@ -55,11 +58,16 @@ class LangchainGraphRagService(GraphRagService):
             cypher_prompt=cypher_generation_prompt,
             return_intermediate_steps=True,
             allow_dangerous_requests=True,
+            validate_cypher=True,
             top_k=int(self.config["LANGCHAIN_CYPHER_TOPK"]),
         )
 
         try:
-            result = chain.invoke(question)
+            result = chain.invoke({
+                "schema": self.config["NEO4J_SCHEMA"],
+                "examples": self.config["NEO4J_EXAMPLES_LIST"],
+                "query": question
+            })
             return result["result"], result['intermediate_steps'][0]['query']
         except (ValidationError, ValueError) as e:
             logging.error("RAG failure: %s", e)
