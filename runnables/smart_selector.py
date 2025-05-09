@@ -12,7 +12,7 @@ class SmartSelector(Runnable[ChatRequest, ChatRequest]):
 
     def __init__(self, llm: BaseLanguageModel):
         def dummy_function(request: ChatRequest) -> ChatRequest:
-            cypher_keywords = ["graph"]
+            cypher_keywords = [" graph "]
             if any(kw in request.message.lower() for kw in cypher_keywords):
                 request.metadata["route"] = "cypher"
             else:

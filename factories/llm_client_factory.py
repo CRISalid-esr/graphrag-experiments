@@ -1,5 +1,6 @@
 from langchain_core.language_models import BaseLanguageModel
 from langchain_openai import ChatOpenAI
+from langchain_ollama import ChatOllama
 
 from config import config
 
@@ -28,4 +29,13 @@ class LLMClientFactory:
                 max_tokens=1000,
             )
 
+        if provider == "ollama":
+            model_name = config['OLLAMA_MODEL_NAME']
+            temperature = float(config['OLLAMA_MODEL_TEMP'])
+
+            return ChatOllama(
+                model=model_name,
+                temperature=temperature,
+                num_predict=500
+            )
         raise ValueError(f"Unknown provider: {provider}")
