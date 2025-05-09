@@ -1,6 +1,7 @@
 """
     This module defines the data models used in the application.
 """
+from collections import defaultdict
 from typing import List, Optional, Literal
 
 from pydantic import BaseModel
@@ -22,6 +23,7 @@ class ChatRequest(BaseModel):
     """
     history: List[ChatMessage]
     message: str
+    metadata: dict = defaultdict(dict)
 
 
 class ChatResponse(BaseModel):
@@ -29,4 +31,4 @@ class ChatResponse(BaseModel):
     Represents a response from the chat API.
     """
     reply: str
-    query: str
+    query: Optional[str] = None
