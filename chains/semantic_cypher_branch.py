@@ -21,7 +21,7 @@ class SemanticCypherBranch(Runnable[ChatRequest, ChatResponse]):
 
         self.chain = SmartSelector(llm) | RunnableBranch(
             (lambda x: x.metadata["route"] == "cypher", CypherRetrieval(llm=llm, graph=graph)),
-            (lambda x: x.metadata["route"] == "semantic", SemanticRetrieval(llm=llm, graph=graph)),
+            (lambda x: x.metadata["route"] == "semantic", SemanticRetrieval(llm=llm)),
             RunnableLambda(lambda x: "Invalid route")
         )
 
