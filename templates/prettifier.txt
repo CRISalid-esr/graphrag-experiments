@@ -1,0 +1,5 @@
+Format the following list into a clear, reader-friendly text.
+I do not want any proposal afterwards.
+I want the text to be formatted for display in a chatbot on the web.
+
+{list}
