@@ -60,7 +60,6 @@ class SemanticRetrieval(Runnable[ChatRequest, ChatResponse]):
 
     @staticmethod
     def _format_docs(docs: list) -> dict:
-        print(docs)
         if not docs:
             return {"raw": "No similar titles found."}
         raw_text = "\n".join(
