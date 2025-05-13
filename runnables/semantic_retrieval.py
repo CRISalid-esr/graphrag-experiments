@@ -28,6 +28,15 @@ class SemanticRetrieval(Runnable[ChatRequest, ChatResponse]):
             node_label="Literal",
             text_node_property="value",
             embedding_node_property="title_embedding",
+            retrieval_query="""
+               // node and score are passed from the vector index logic
+               WITH node AS literal, score AS similarity
+               MATCH (literal)<-[:HAS_TITLE]-(doc:Document)
+                     -[:HAS_CONTRIBUTION]->(contrib:Contribution)
+                     <-[:HAS_CONTRIBUTION]-(author:Person)
+               RETURN literal.value AS text, similarity AS score,
+                   {author_name: author.display_name} AS metadata
+           """
         )
 
         retriever = self.vector_retriever.as_retriever(
@@ -62,7 +71,8 @@ class SemanticRetrieval(Runnable[ChatRequest, ChatResponse]):
     def _format_docs(docs: list) -> dict:
         if not docs:
             return {"raw": "No similar titles found."}
-        raw_text = "\n".join(f"- {doc.page_content}" for doc in docs)
+        raw_text = "\n".join(f"- {doc.page_content} de {doc.metadata['author_name']}"
+                             for doc in docs)
         return {"list": raw_text}
 
     @staticmethod
