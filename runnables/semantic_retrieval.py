@@ -1,23 +1,26 @@
 from langchain.schema.runnable import Runnable
-from langchain_core.language_models import BaseLanguageModel
-from langchain_core.runnables import RunnableLambda
 from langchain_community.embeddings import HuggingFaceEmbeddings
 from langchain_community.vectorstores import Neo4jVector
+from langchain_core.embeddings import Embeddings
+from langchain_core.language_models import BaseLanguageModel
+from langchain_core.runnables import RunnableLambda
 
-from schemas import ChatRequest, ChatResponse
 from config import config as app_config
 from prompts.vector_retrieval_prettifier_prompt import VectorRetrievalPrettifierPrompt
+from schemas import ChatRequest, ChatResponse
+
 
 class SemanticRetrieval(Runnable[ChatRequest, ChatResponse]):
     """
     Runnable to perform semantic retrieval using a language model, with prettified output.
     """
 
+    _embedding_model: Embeddings = None
+
     def __init__(self, llm: BaseLanguageModel):
-        self.embedding_model = HuggingFaceEmbeddings(model_name=app_config['BERT_MODEL'])
 
         self.vector_retriever = Neo4jVector.from_existing_index(
-            embedding=self.embedding_model,
+            embedding=self._get_model(),
             url=app_config["NEO4J_URI"],
             username=app_config["NEO4J_USERNAME"],
             password=app_config["NEO4J_PASSWORD"],
@@ -38,12 +41,18 @@ class SemanticRetrieval(Runnable[ChatRequest, ChatResponse]):
         prettify_chain = prettify_prompt | llm
 
         self.chain: Runnable[ChatRequest, ChatResponse] = (
-            RunnableLambda(self._convert_input)
-            | retriever
-            | RunnableLambda(self._format_docs)
-            | prettify_chain
-            | RunnableLambda(self._convert_to_response)
+                RunnableLambda(self._convert_input)
+                | retriever
+                | RunnableLambda(self._format_docs)
+                | prettify_chain
+                | RunnableLambda(self._convert_to_response)
         )
+
+    @classmethod
+    def _get_model(cls) -> Embeddings:
+        if cls._embedding_model is None:
+            cls._embedding_model = HuggingFaceEmbeddings(model_name=app_config['BERT_MODEL'])
+        return cls._embedding_model
 
     @classmethod
     def _convert_input(cls, chat_request: ChatRequest) -> str:
