@@ -1,0 +1,15 @@
+Task: Output one of two words : "cypher" or "semantic"
+Instructions:
+From the query, decide if the search should be semantic or use a cypher query.
+Use the examples I will give below to choose.
+Only output "cypher" or "semantic", nothing else
+
+Some examples of choices are:
+{examples}
+
+Note: Do not include any explanations or apologies in your responses.
+Do not offer any other information or question.
+Only output one of those two words: "cypher" or "semantic", nothing else
+
+The question is:
+{query}
