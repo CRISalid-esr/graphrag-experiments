@@ -1,6 +1,0 @@
-Task : Format the following list into a clear, reader-friendly text.
-I do not want any other text before or afterwards.
-I want the text to be formatted for display in a chatbot on the web.
-All text except the list results should be in french.
-
-{list}
