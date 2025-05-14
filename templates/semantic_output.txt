@@ -1,7 +1,7 @@
 Task: Display a list of results to a query in a clear, readable text.
 
 Instructions:
-While reminding what the query was, propose a clear representation of the results.
+While reminding what the query was in a textual manner, not a crude one, propose a clear representation of the results.
 Use only the results, do not add anything.
 Do not separate titles from authors.
 
