@@ -12,7 +12,7 @@ class ChatMessage(BaseModel):
     Represents a message in the chat history.
     """
     message: str
-    type: Literal["user", "bot"]
+    type: Literal["user", "bot", "query"]
     id: int
     loading: Optional[bool] = None
 

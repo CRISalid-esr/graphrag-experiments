@@ -7,8 +7,14 @@ import chatBotConfig from "./ChatBotConfig";
 
 function App() {
     return (<div>
-        <Chatbot config={chatBotConfig} messageParser={MessageParser} actionProvider={ActionProvider}/><
-        /div>);
+        <Chatbot
+            config={chatBotConfig}
+            messageParser={MessageParser}
+            actionProvider={ActionProvider}
+            headerText="Prototype d'agent conversationnel sur graphe de connaissance"
+            placeholderText="Posez votre question ici"
+        />
+    </div>);
 }
 
 export default App;
