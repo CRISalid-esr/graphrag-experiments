@@ -1,10 +1,14 @@
 import React from 'react';
+import {createCustomMessage} from "react-chatbot-kit";
 
 const ActionProvider = ({createChatBotMessage, setState, children}) => {
 
     const sendToGraphRag = async (messages, newMessage) => {
         try {
-            const response = await fetch("/api", {
+            // const host = 'http://localhost:8000';
+            const host = '';
+            const url = `${host}/api`;
+            const response = await fetch(url, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -25,10 +29,16 @@ const ActionProvider = ({createChatBotMessage, setState, children}) => {
             }
 
             const botMessage = createChatBotMessage(data.reply);
+            let queryMessage = null;
+            if (data.query) {
+                queryMessage = createCustomMessage(data.query, 'query', {
+                    payload: data.query,
+                });
+            }
 
             setState((prev) => ({
                 ...prev,
-                messages: [...prev.messages, botMessage],
+                messages: [...prev.messages, botMessage, queryMessage].filter(Boolean),
             }));
         } catch (error) {
             console.error("Error:", error);

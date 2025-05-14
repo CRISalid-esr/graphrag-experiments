@@ -1,9 +1,11 @@
 from fastapi import FastAPI
 from fastapi.staticfiles import StaticFiles
 from langchain.chains.base import Chain
+from starlette.middleware.cors import CORSMiddleware
 from starlette.responses import FileResponse
 
 from chains.semantic_cypher_branch import SemanticCypherBranch
+from config import config
 from schemas import ChatRequest, ChatResponse
 
 
@@ -14,6 +16,16 @@ class GraphRag(FastAPI):
 
     def __init__(self):
         super().__init__()
+        origins = config["CORS_ORIGINS"]
+        if not origins:
+            raise ValueError("CORS_ORIGINS must be set in the configuration.")
+        self.add_middleware(
+            CORSMiddleware,
+            allow_origins=origins.split(','),
+            allow_credentials=True,
+            allow_methods=["*"],  # Allows all methods (GET, POST, etc.)
+            allow_headers=["*"],  # Allows all headers
+        )
         self.chain_instance: Chain | None = None
         self._mount_gui()
         self._include_routes()
