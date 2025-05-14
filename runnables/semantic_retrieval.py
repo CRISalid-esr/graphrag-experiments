@@ -2,10 +2,12 @@ from langchain.schema.runnable import Runnable
 from langchain_community.embeddings import HuggingFaceEmbeddings
 from langchain_community.vectorstores import Neo4jVector
 from langchain_core.embeddings import Embeddings
+from langchain_core.messages import AIMessage
 from langchain_core.runnables import RunnableLambda
 
 from config import config as app_config
 from schemas import ChatRequest, ChatResponse
+from prompts.semantic_output_prompt import SemanticOutputPrompt
 
 
 class SemanticRetrieval(Runnable[ChatRequest, ChatResponse]):
@@ -15,7 +17,7 @@ class SemanticRetrieval(Runnable[ChatRequest, ChatResponse]):
 
     _embedding_model: Embeddings = None
 
-    def __init__(self):
+    def __init__(self, llm):
 
         self.vector_retriever = Neo4jVector.from_existing_index(
             embedding=self._get_model(),
@@ -41,10 +43,20 @@ class SemanticRetrieval(Runnable[ChatRequest, ChatResponse]):
             search_kwargs={"k": int(app_config["LANGCHAIN_VECTOR_TOPK"])}
         )
 
+        output_prompt = SemanticOutputPrompt.from_file(
+            app_config["SEMANTIC_OUTPUT_PROMPT"]
+        )
+
+        output_chain = output_prompt | llm
+
         self.chain: Runnable[ChatRequest, ChatResponse] = (
                 RunnableLambda(self._convert_input)
-                | retriever
+                | {
+                    "query": lambda x: x,
+                    "docs": retriever
+                }
                 | RunnableLambda(self._format_docs)
+                | output_chain
                 | RunnableLambda(self._convert_to_response)
         )
 
@@ -59,18 +71,19 @@ class SemanticRetrieval(Runnable[ChatRequest, ChatResponse]):
         return chat_request.message
 
     @staticmethod
-    def _format_docs(docs: list) -> dict:
+    def _format_docs(inputs: dict) -> dict:
+        docs = inputs["docs"]
         if not docs:
-            return {"raw": "No similar titles found."}
+            return {"query": inputs["query"], "results": "No similar titles found."}
         raw_text = "\n".join(
-            f"- {doc.page_content} de {', '.join(doc.metadata['author_names'])}"
+            f" {doc.page_content} de {', '.join(doc.metadata['author_names'])}"
             for doc in docs
         )
-        return raw_text
+        return {"query": inputs["query"], "results": raw_text}
 
     @staticmethod
-    def _convert_to_response(prettified_text: str) -> ChatResponse:
-        return ChatResponse(reply=prettified_text, query=None)
+    def _convert_to_response(message: AIMessage) -> ChatResponse:
+        return ChatResponse(reply=message.content, query=None)
 
     def invoke(self, __input, config=None, **kwargs):
         return self.chain.invoke(__input, config=config)
