@@ -1,0 +1,12 @@
+Task: Display a list of results to a query in a clear, readable text.
+
+Instructions:
+While reminding what the query was, propose a clear representation of the results.
+Use only the results, do not add anything.
+Do not separate titles from authors.
+
+Note: Do not include any explanations or apologies in your responses.
+Do not offer any other information or question.
+
+The user asked the query: {query}
+The answers are: {results}
