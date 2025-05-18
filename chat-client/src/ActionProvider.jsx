@@ -1,7 +1,7 @@
 import React from 'react';
-import {createCustomMessage} from "react-chatbot-kit";
+import { createCustomMessage } from "react-chatbot-kit";
 
-const ActionProvider = ({createChatBotMessage, setState, children}) => {
+const ActionProvider = ({ setState, children }) => {
 
     const sendToGraphRag = async (messages, newMessage) => {
         try {
@@ -28,7 +28,9 @@ const ActionProvider = ({createChatBotMessage, setState, children}) => {
                 throw new Error(data.error);
             }
 
-            const botMessage = createChatBotMessage(data.reply);
+            const botMessage = createCustomMessage(data.reply, 'chatbot', {
+                payload: data.reply,
+            });
             let queryMessage = null;
             if (data.query) {
                 queryMessage = createCustomMessage(data.query, 'query', {
@@ -42,7 +44,11 @@ const ActionProvider = ({createChatBotMessage, setState, children}) => {
             }));
         } catch (error) {
             console.error("Error:", error);
-            const errorMessage = createChatBotMessage("Sorry, I couldn't reach the server.");
+            const errorMessage = createCustomMessage(
+                "Sorry, I couldn't reach the server.",
+                'chatbot',
+                { payload: "Sorry, I couldn't reach the server." }
+            );
             setState((prev) => ({
                 ...prev,
                 messages: [...prev.messages, errorMessage],
