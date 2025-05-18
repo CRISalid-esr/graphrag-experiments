@@ -20,7 +20,6 @@ const ActionProvider = ({setState, children}) => {
                 }
             ));
             const url = `${host}/api`;
-            console.log(messages);
             const response = await fetch(url, {
                 method: "POST",
                 headers: {
