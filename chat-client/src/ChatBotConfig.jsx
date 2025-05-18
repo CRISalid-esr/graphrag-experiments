@@ -1,6 +1,7 @@
 import {createCustomMessage} from 'react-chatbot-kit';
 import CypherMessage from "./CypherMessage";
 import MarkdownMessage from "./MarkdownMessage";
+import LoadingMessage from "./LoadingMessage";
 
 var initialMessage = `Bonjour, je peux vous aider à accéder aux informations sur la recherche à l'université.`;
 const chatBotConfig = {
@@ -11,6 +12,7 @@ const chatBotConfig = {
     customMessages: {
         query: (props) => <CypherMessage {...props} />,
         chatbot: (props) => <MarkdownMessage {...props} />,
+        loading: (props) => <LoadingMessage {...props} />,
     },
 };
 export default chatBotConfig;
