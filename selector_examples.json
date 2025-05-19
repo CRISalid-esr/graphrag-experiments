@@ -4,6 +4,7 @@
   "USER INPUT: 'Quels journaux ont publié des articles sur les sujets liés à l'archéobotanique ?' CHOICE: 'cypher'",
   "USER INPUT: 'Donne-moi les titres des publications ayant le concept 'climat' en français.' CHOICE: 'cypher'",
   "USER INPUT: 'Quels laboratoires ont le mot 'archéologie' dans leur description ?' CHOICE: 'cypher'",
+  "USER INPUT: 'Quels laboratoires ont des chercheurs travaillant sur les Manuscrits et le Moyen-Âge ?' CHOICE: 'cypher'",
   "USER INPUT: 'Donne moi les articles sur la stratigraphie urbaine d'Oran.' CHOICE: 'semantic'",
   "USER INPUT: 'Quelles sont les publications sur les marchés et la bourse.' CHOICE: 'semantic'",
   "USER INPUT: 'Quels articles concernent le genre en Europe' CHOICE: 'semantic'"
