@@ -12,11 +12,25 @@ body {
     margin-left: auto !important;
     margin-right: auto !important;
 }
+
+.react-chatbot-kit-chat-inner-container {
+    height: auto !important;
+}
+
+.react-chatbot-kit-chat-message-container {
+    height: 750px !important;
+}
+
 .react-chatbot-kit-chat-bot-message {
     width: 450px !important;
 }
+
 .react-chatbot-kit-user-chat-message {
     width: 450px !important;
+}
+
+.react-chatbot-kit-chat-bot-avatar-container {
+    background-color: #20232a !important;
 }
 
 code {

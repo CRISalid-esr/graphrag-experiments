@@ -6,8 +6,8 @@ from langchain_core.messages import AIMessage
 from langchain_core.runnables import RunnableLambda
 
 from config import config as app_config
+from prompts.prompt_builder import PromptBuilder
 from schemas import ChatRequest, ChatResponse
-from prompts.semantic_output_prompt import SemanticOutputPrompt
 
 
 class SemanticRetrieval(Runnable[ChatRequest, ChatResponse]):
@@ -43,9 +43,8 @@ class SemanticRetrieval(Runnable[ChatRequest, ChatResponse]):
             search_kwargs={"k": int(app_config["LANGCHAIN_VECTOR_TOPK"])}
         )
 
-        output_prompt = SemanticOutputPrompt.from_file(
-            app_config["SEMANTIC_OUTPUT_PROMPT"]
-        )
+        output_prompt = PromptBuilder().from_file(
+            app_config["SEMANTIC_OUTPUT_PROMPT"]).with_variables(["query", "results"]).build()
 
         output_chain = output_prompt | llm
 

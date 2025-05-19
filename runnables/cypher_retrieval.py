@@ -7,7 +7,7 @@ from langchain_core.runnables import RunnableLambda
 from langchain_neo4j import GraphCypherQAChain
 
 from config import config as app_config
-from prompts.few_shot_cypher_generation_prompt import FewShotCypherGenerationPrompt
+from prompts.prompt_builder import PromptBuilder
 from schemas import ChatRequest, ChatResponse
 
 
@@ -22,15 +22,20 @@ class CypherRetrieval(Runnable[ChatRequest, ChatResponse]):
             with open(app_config["NEO4J_EXAMPLES"], 'rt', encoding='utf-8') as f:
                 CypherRetrieval._examples = json.load(f)
 
-        cypher_prompt = FewShotCypherGenerationPrompt.from_file(
-            app_config["NEO4J_CYPHER_PROMPT"]
-        )
+        cypher_prompt = PromptBuilder().from_file(
+            app_config["NEO4J_CYPHER_PROMPT"]).with_variables(
+            ["schema", "examples", "query"]).build()
+
+        qa_prompt = PromptBuilder().from_file(
+            app_config["NEO4J_QA_PROMPT"]).with_variables(
+            ["schema", "question"]).build()
 
         self.inner_chain = GraphCypherQAChain.from_llm(
             llm,
             graph=graph,
             verbose=True,
             cypher_prompt=cypher_prompt,
+            qa_prompt=qa_prompt,
             return_intermediate_steps=True,
             allow_dangerous_requests=True,
             validate_cypher=True,

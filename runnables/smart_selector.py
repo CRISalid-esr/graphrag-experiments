@@ -5,7 +5,7 @@ from langchain_core.language_models import BaseLanguageModel
 from langchain_core.runnables import RunnableLambda
 
 from config import config as app_config
-from prompts.selector_prompt import SelectorPrompt
+from prompts.prompt_builder import PromptBuilder
 from schemas import ChatRequest
 
 
@@ -16,14 +16,12 @@ class SmartSelector(Runnable[ChatRequest, ChatRequest]):
     _examples = None
 
     def __init__(self, llm: BaseLanguageModel):
-
         if SmartSelector._examples is None:
             with open(app_config["SELECTOR_EXAMPLES"], 'rt', encoding='utf-8') as f:
                 SmartSelector._examples = json.load(f)
 
-        selector_prompt = SelectorPrompt.from_file(
-            app_config["SELECTOR_PROMPT"]
-        )
+        selector_prompt = PromptBuilder().from_file(
+            app_config["SELECTOR_PROMPT"]).with_variables(["examples", "query"]).build()
 
         self.selector_chain = selector_prompt | llm
 
@@ -40,7 +38,7 @@ class SmartSelector(Runnable[ChatRequest, ChatRequest]):
             "request": chat_request
         }
 
-    def _return_request_with_metadata(self, __input:dict) -> ChatRequest:
+    def _return_request_with_metadata(self, __input: dict) -> ChatRequest:
         request = __input["request"]
         request.metadata["route"] = self.selector_chain.invoke(__input).content
         return request
