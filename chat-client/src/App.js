@@ -23,8 +23,6 @@ function App() {
                     <img src={csiesrLogo} alt="CSIESR logo" className="CSIESR-logo"/>
                 </div>
             </header>
-
-
             <div className="App-body">
                 <Chatbot
                     config={chatBotConfig}
