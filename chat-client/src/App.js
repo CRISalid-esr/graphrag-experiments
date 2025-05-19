@@ -6,6 +6,7 @@ import ActionProvider from "./ActionProvider";
 import chatBotConfig from "./ChatBotConfig";
 
 import logo from './logo.svg';
+import csiesrLogo from './logo-CSIESR-1.png';
 import gplLogo from './GPLv3_Logo.svg';
 
 function App() {
@@ -17,8 +18,11 @@ function App() {
                     <strong>Consortium CRISalid</strong><br/>
                     LLM powered Current Research Information Systems
                 </div>
+                <div className="CSIESR-right">
+                    <div className="CSIESR-text">Assises Annuelles du CSIESR 2025</div>
+                    <img src={csiesrLogo} alt="CSIESR logo" className="CSIESR-logo"/>
+                </div>
             </header>
-
             <div className="App-body">
                 <Chatbot
                     config={chatBotConfig}
