@@ -29,6 +29,20 @@ class LLMClientFactory:
                 max_tokens=1000,
             )
 
+        if provider == "ilaas":
+            base_url = config['ILAAS_URL']
+            api_key = config['ILAAS_API_KEY']
+            model_name = config['ILAAS_MODEL_NAME']
+            temperature = float(config['ILAAS_MODEL_TEMP'])
+
+            return ChatOpenAI(
+                base_url=base_url,
+                api_key=api_key,
+                model=model_name,
+                temperature=temperature,
+                max_tokens=1000,
+            )
+
         if provider == "ollama":
             model_name = config['OLLAMA_MODEL_NAME']
             temperature = float(config['OLLAMA_MODEL_TEMP'])
