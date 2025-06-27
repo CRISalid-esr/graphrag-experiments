@@ -9,6 +9,7 @@ from runnables.semantic_retrieval import SemanticRetrieval
 from runnables.smart_selector import SmartSelector
 from schemas import ChatRequest, ChatResponse
 
+from config import config
 
 class SemanticCypherBranch(Runnable[ChatRequest, ChatResponse]):
     """
@@ -16,7 +17,7 @@ class SemanticCypherBranch(Runnable[ChatRequest, ChatResponse]):
     """
 
     def __init__(self):
-        llm: BaseLanguageModel = LLMClientFactory.get_llm_client("openai")  # or "gemini", etc.
+        llm: BaseLanguageModel = LLMClientFactory.get_llm_client(config['LLM_PROVIDER'])
         graph = GraphClientFactory.get_client()
 
         self.chain = SmartSelector(llm) | RunnableBranch(
